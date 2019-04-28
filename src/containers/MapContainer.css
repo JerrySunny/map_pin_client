@@ -1,0 +1,13 @@
+.Map-Container {
+    width: 50% !important;
+    height: 80% !important;
+}
+
+.Pin-Container--btn {
+    padding: 2%;
+    margin-left: 10%;
+}
+
+.Pin-Container--text {
+    margin-left: 18%;
+}
