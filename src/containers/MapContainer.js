@@ -2,20 +2,13 @@ import React, { Component } from 'react';
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from 'google-maps-react';
 import { api_key } from '../config';
 import './MapContainer.css';
-
-
-
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { getMarkers, addTodo } from '../store/markers/actions';
 export class MapContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            markers: [{
-                key: 1,
-                position: {
-                    lat: 37.768465,
-                    lng: -122.434738,
-                }
-            }],
             selectedPlace: null,
             cordinates: '',
         };
@@ -26,6 +19,7 @@ export class MapContainer extends Component {
 
     addPin = (map) => {
         alert(this.state.cordinates);
+        const { dispatch } = this.props;
         const cords = this.state.cordinates;
         const splitedCords = cords ? cords.split(',') : null;
         if (splitedCords.length === 2) {
@@ -36,9 +30,10 @@ export class MapContainer extends Component {
                     lng: splitedCords[1]
                 }
             }
-            this.setState({
-                markers: [...this.state.markers, marker]
-            })
+            // this.setState({
+            //     markers: [...this.state.markers, marker]
+            // })
+            dispatch(addTodo(marker));
         }
     };
 
@@ -51,13 +46,19 @@ export class MapContainer extends Component {
     handleChange(e) {
         this.setState({ cordinates: e.target.value });
     }
+    componentDidMount() {
+        const { dispatch } = this.props;
+        dispatch(getMarkers());
+    }
     render() {
+        const { markers } = this.props;
+        console.log(markers);
         return (
             <div className="">
                 <div className="">
 
                     <Map google={this.props.google} zoom={14} className="Map-Container">
-                        {this.state.markers.map(marker => (
+                        {markers.map(marker => (
                             <Marker
                                 key={marker.key}
                                 title={'The marker`s title will appear as a tooltip.'}
@@ -87,11 +88,20 @@ export class MapContainer extends Component {
                         title="Three letter country code">
                     </input>
                 </div>
+
             </div>
         );
     }
 }
-
-export default GoogleApiWrapper({
+MapContainer.propTypes = {
+    markers: PropTypes.array,
+    dispatch: PropTypes.func
+};
+const mapStateToProps = state => ({
+    markers: state.markers ? state.markers : null,
+})
+export default connect(
+    mapStateToProps
+)(GoogleApiWrapper({
     apiKey: (api_key)
-})(MapContainer)
+})(MapContainer))
