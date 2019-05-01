@@ -1,8 +1,6 @@
 
 import { GET_MARKERS, ADD_MARKER } from './actions'
-const initialState = {
-    markers: []
-}
+
 const markers = (state = [], action) => {
     switch (action.type) {
         case GET_MARKERS:
