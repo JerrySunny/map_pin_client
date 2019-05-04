@@ -26,5 +26,5 @@ yarn-error.log*
 
 # build artifacts
 src/**/*.css
-*.env
+*.env.development
 

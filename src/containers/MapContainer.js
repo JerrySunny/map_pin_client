@@ -5,7 +5,7 @@ import { api_key } from '../config';
 import './MapContainer.css';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { getMarkers, addTodo } from '../store/markers/actions';
+import { getMarkers, addMarker } from '../store/markers/actions';
 import MarkerDialog from '../components/MarkerDialog';
 import MarkerList from '../components/MarkerList'
 export class MapContainer extends Component {
@@ -19,12 +19,11 @@ export class MapContainer extends Component {
                 latitude: null,
                 longitude: null,
                 title: '',
-                key: null
+                _id: null
             },
             isEdit: false,
         };
         this.onMarkerClick = this.onMarkerClick.bind(this);
-        // this.addPin = this.addMarker.bind(this);
     }
 
     openDialog() {
@@ -32,28 +31,22 @@ export class MapContainer extends Component {
     }
     editMarker(markerEditObj) {
         const marker = { ...this.state.marker };
-        marker.key = markerEditObj.key;
+        marker._id = markerEditObj._id;
         marker.title = markerEditObj.title;
-        marker.latitude = markerEditObj.position.lat;
-        marker.longitude = markerEditObj.position.lng;
+        marker.latitude = markerEditObj.latitude;
+        marker.longitude = markerEditObj.longitude;
         this.setState({ showDialog: true, marker, isEdit: true });
     }
     addMarker = () => {
-        // alert('hi');
         const marker = { ...this.state.marker }
         const { dispatch } = this.props;
         const markerObj = {
-            key: marker.title,
-            position: {
-                lat: marker.latitude,
-                lng: marker.longitude
-            },
+            _id: marker._id,
+            latitude: marker.latitude,
+            longitude: marker.longitude,
             title: marker.title
         };
-        //     // this.setState({
-        //     //     markers: [...this.state.markers, marker]
-        //     // })
-        dispatch(addTodo(markerObj));
+        dispatch(addMarker(markerObj));
         this.hideDialog();
     };
     handleChange(value, id) {
@@ -76,7 +69,7 @@ export class MapContainer extends Component {
                 latitude: null,
                 longitude: null,
                 title: '',
-                key: null
+                _id: null
             }
         });
     };
@@ -92,7 +85,6 @@ export class MapContainer extends Component {
     }
     render() {
         const { markers } = this.props;
-        // console.log(markers);
         return (
             <div>
                 <MarkerDialog
@@ -107,10 +99,10 @@ export class MapContainer extends Component {
                     <Map google={this.props.google} zoom={14} className="Map-Container">
                         {markers.map(marker => (
                             <Marker
-                                key={marker.key}
+                                key={marker._id}
                                 title={'The marker`s title will appear as a tooltip.'}
                                 name={'SOMA'}
-                                position={marker.position}
+                                position={{ lat: marker.latitude, lng: marker.longitude }}
                                 onClick={this.onMarkerClick} />
                         ))}
                         <InfoWindow onClose={this.onInfoWindowClose}>
@@ -137,7 +129,7 @@ MapContainer.propTypes = {
     dispatch: PropTypes.func
 };
 const mapStateToProps = state => ({
-    markers: state.markers ? state.markers : null,
+    markers: state.markers ? state.markers.markers : null,
 })
 export default connect(
     mapStateToProps

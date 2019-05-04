@@ -14,14 +14,14 @@ export class MarkerList extends PureComponent {
             <div className="Pin-Container--grid">
                 <GridList container="markers" size={6} component="section">
                     {markers.map((marker) => (
-                        <Card key={marker.key} style={style}>
+                        <Card key={marker._id} style={style}>
                             <CardTitle title={marker.title}
                                 subtitle={marker.title}
                             />
                             <p>
-                                latitude:{marker.position.lat}
+                                latitude:{marker.latitude}
                                 <br />
-                                longitude:{marker.position.lng}
+                                longitude:{marker.longitude}
                             </p>
                             <CardActions className="md-divider-border md-divider-border--top" centered   >
                                 <Button flat primary onClick={()=>this.props.editMarker(marker)}>Edit</Button>
