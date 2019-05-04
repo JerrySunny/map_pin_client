@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, GridList } from 'react-md';
+import { Button, GridList, Divider } from 'react-md';
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from 'google-maps-react';
 import { api_key } from '../config';
 import './MapContainer.css';
@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { getMarkers, addTodo } from '../store/markers/actions';
 import MarkerDialog from '../components/MarkerDialog';
+import MarkerList from '../components/MarkerList'
 export class MapContainer extends Component {
     constructor(props) {
         super(props);
@@ -30,7 +31,8 @@ export class MapContainer extends Component {
             position: {
                 lat: marker.latitude,
                 lng: marker.longitude
-            }
+            },
+            title: marker.title
         };
         //     // this.setState({
         //     //     markers: [...this.state.markers, marker]
@@ -64,7 +66,7 @@ export class MapContainer extends Component {
                     addMarker={(marker) => this.addMarker(marker)}
                 >
                 </MarkerDialog>
-                <GridList container="pictures" size={6} component="section">
+                <GridList container="pictures" size={6} component="section" >
                     <Map google={this.props.google} zoom={14} className="Map-Container">
                         {markers.map(marker => (
                             <Marker
@@ -80,8 +82,12 @@ export class MapContainer extends Component {
                             </div>
                         </InfoWindow>
                     </Map>
-                    <div className="Pin-Container--btn">
-                        <Button flat primary swapTheming onClick={() => this.openDialog()} className="addBtn">Add Marker</Button>
+                    <div className="Pin-Container" name='markers'>
+                        <div>
+                            <Button flat primary swapTheming onClick={() => this.openDialog()} className="addBtn">Add Marker</Button>
+                        </div>
+                        <Divider className="Pin-Container--divider" />
+                        <MarkerList markers={markers} />
                     </div>
                 </GridList>
 

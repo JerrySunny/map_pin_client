@@ -17,14 +17,16 @@ const getMarkersList = () => {
             position: {
                 lat: 37.768465,
                 lng: -122.434738,
-            }
+            },
+            title: 'lepiz'
         },
         {
             key: 2,
             position: {
                 lat: 37.771348,
                 lng: -122.412575,
-            }
+            },
+            title: 'san fransisco'
         }
     ]
     return markers;
