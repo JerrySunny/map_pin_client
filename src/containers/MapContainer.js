@@ -1,62 +1,70 @@
 import React, { Component } from 'react';
+import { Button, GridList } from 'react-md';
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from 'google-maps-react';
 import { api_key } from '../config';
 import './MapContainer.css';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { getMarkers, addTodo } from '../store/markers/actions';
+import MarkerDialog from '../components/MarkerDialog';
 export class MapContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
             selectedPlace: null,
             cordinates: '',
+            showDialog: false,
         };
         this.onMarkerClick = this.onMarkerClick.bind(this);
-        this.addPin = this.addPin.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+        // this.addPin = this.addMarker.bind(this);
     }
 
-    addPin = (map) => {
-        alert(this.state.cordinates);
+    openDialog() {
+        this.setState({ showDialog: true });
+    }
+    addMarker = (marker) => {
+        // alert('hi');
         const { dispatch } = this.props;
-        const cords = this.state.cordinates;
-        const splitedCords = cords ? cords.split(',') : null;
-        if (splitedCords.length === 2) {
-            const marker = {
-                key: splitedCords[0],
-                position: {
-                    lat: splitedCords[0],
-                    lng: splitedCords[1]
-                }
+        const markerObj = {
+            key: marker.title,
+            position: {
+                lat: marker.latitude,
+                lng: marker.longitude
             }
-            // this.setState({
-            //     markers: [...this.state.markers, marker]
-            // })
-            dispatch(addTodo(marker));
-        }
+        };
+        //     // this.setState({
+        //     //     markers: [...this.state.markers, marker]
+        //     // })
+        dispatch(addTodo(markerObj));
+        this.hideDialog();
     };
 
+    hideDialog = () => {
+        this.setState({ showDialog: false });
+    };
     onMarkerClick(props, marker, e) {
         this.setState({
             selectedPlace: marker.name
         });
         alert(marker.name);
     };
-    handleChange(e) {
-        this.setState({ cordinates: e.target.value });
-    }
     componentDidMount() {
         const { dispatch } = this.props;
         dispatch(getMarkers());
     }
     render() {
         const { markers } = this.props;
-        console.log(markers);
+        // console.log(markers);
         return (
-            <div className="">
-                <div className="">
-
+            <div>
+                <MarkerDialog
+                    visible={this.state.showDialog}
+                    hide={() => this.hideDialog()}
+                    handleKeyDown={() => this.handleKeyDownForDialog()}
+                    addMarker={(marker) => this.addMarker(marker)}
+                >
+                </MarkerDialog>
+                <GridList container="pictures" size={6} component="section">
                     <Map google={this.props.google} zoom={14} className="Map-Container">
                         {markers.map(marker => (
                             <Marker
@@ -72,22 +80,10 @@ export class MapContainer extends Component {
                             </div>
                         </InfoWindow>
                     </Map>
-                </div>
-                <div className="Pin-Container--btn">
-                    <button onClick={this.addPin} className="addBtn">Add Map</button>
-
-                </div>
-                <div className="Pin-Container--text">
-                    <input
-                        value={this.state.cordinates}
-                        onChange={this.handleChange}
-                        type="text"
-                        pattern='[0-9]+(\.[0-9][0-9]?)?,[0-9]+(\.[0-9][0-9]?)?'
-                        name="cordinates"
-                        placeholder="lat,lng"
-                        title="Three letter country code">
-                    </input>
-                </div>
+                    <div className="Pin-Container--btn">
+                        <Button flat primary swapTheming onClick={() => this.openDialog()} className="addBtn">Add Marker</Button>
+                    </div>
+                </GridList>
 
             </div>
         );
