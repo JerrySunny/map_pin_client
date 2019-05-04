@@ -15,6 +15,13 @@ export class MapContainer extends Component {
             selectedPlace: null,
             cordinates: '',
             showDialog: false,
+            marker: {
+                latitude: null,
+                longitude: null,
+                title: '',
+                key: null
+            },
+            isEdit: false,
         };
         this.onMarkerClick = this.onMarkerClick.bind(this);
         // this.addPin = this.addMarker.bind(this);
@@ -23,8 +30,17 @@ export class MapContainer extends Component {
     openDialog() {
         this.setState({ showDialog: true });
     }
-    addMarker = (marker) => {
+    editMarker(markerEditObj) {
+        const marker = { ...this.state.marker };
+        marker.key = markerEditObj.key;
+        marker.title = markerEditObj.title;
+        marker.latitude = markerEditObj.position.lat;
+        marker.longitude = markerEditObj.position.lng;
+        this.setState({ showDialog: true, marker, isEdit: true });
+    }
+    addMarker = () => {
         // alert('hi');
+        const marker = { ...this.state.marker }
         const { dispatch } = this.props;
         const markerObj = {
             key: marker.title,
@@ -40,9 +56,29 @@ export class MapContainer extends Component {
         dispatch(addTodo(markerObj));
         this.hideDialog();
     };
+    handleChange(value, id) {
+        const marker = { ...this.state.marker }
+        if (id === 'title') {
+            marker.title = value;
+        }
+        else if (id === 'latitude') {
+            marker.latitude = value;
+        }
+        else if (id === 'longitude') {
+            marker.longitude = value;
+        }
+        this.setState({ marker });
 
+    }
     hideDialog = () => {
-        this.setState({ showDialog: false });
+        this.setState({
+            showDialog: false, isEdit: false, marker: {
+                latitude: null,
+                longitude: null,
+                title: '',
+                key: null
+            }
+        });
     };
     onMarkerClick(props, marker, e) {
         this.setState({
@@ -62,8 +98,9 @@ export class MapContainer extends Component {
                 <MarkerDialog
                     visible={this.state.showDialog}
                     hide={() => this.hideDialog()}
-                    handleKeyDown={() => this.handleKeyDownForDialog()}
-                    addMarker={(marker) => this.addMarker(marker)}
+                    addMarker={() => this.addMarker()}
+                    marker={this.state.marker}
+                    handleChange={(value, id) => this.handleChange(value, id)}
                 >
                 </MarkerDialog>
                 <GridList container="pictures" size={6} component="section" >
@@ -87,7 +124,7 @@ export class MapContainer extends Component {
                             <Button flat primary swapTheming onClick={() => this.openDialog()} className="addBtn">Add Marker</Button>
                         </div>
                         <Divider className="Pin-Container--divider" />
-                        <MarkerList markers={markers} />
+                        <MarkerList markers={markers} editMarker={(marker) => this.editMarker(marker)} />
                     </div>
                 </GridList>
 

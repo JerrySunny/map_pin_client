@@ -24,7 +24,7 @@ export class MarkerList extends PureComponent {
                                 longitude:{marker.position.lng}
                             </p>
                             <CardActions className="md-divider-border md-divider-border--top" centered   >
-                                <Button flat primary>Edit</Button>
+                                <Button flat primary onClick={()=>this.props.editMarker(marker)}>Edit</Button>
                                 <Button flat primary>Delete</Button>
                             </CardActions>
                         </Card>
@@ -37,6 +37,7 @@ export class MarkerList extends PureComponent {
 }
 MarkerList.propTypes = {
     markers: PropTypes.array,
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
+    editMarker:PropTypes.func,
 };
 export default MarkerList;
