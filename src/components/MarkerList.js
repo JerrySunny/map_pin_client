@@ -3,9 +3,6 @@ import { GridList, Card, CardTitle, Button, CardActions } from 'react-md';
 import PropTypes from 'prop-types'
 
 export class MarkerList extends PureComponent {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { markers } = this.props;
         const style = { maxWidth: 600 };

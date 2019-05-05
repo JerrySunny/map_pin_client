@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import { getMarkers, addMarker, updateMarker, deleteMarker } from '../store/markers/actions';
 import MarkerDialog from '../components/MarkerDialog';
 import MarkerList from '../components/MarkerList'
+import validator from '../validator';
 export class MapContainer extends Component {
     constructor(props) {
         super(props);
@@ -22,6 +23,7 @@ export class MapContainer extends Component {
                 _id: null
             },
             isEdit: false,
+            isError: false,
         };
         this.onMarkerClick = this.onMarkerClick.bind(this);
     }
@@ -40,19 +42,24 @@ export class MapContainer extends Component {
     addMarker = () => {
         const { dispatch } = this.props;
         const marker = { ...this.state.marker }
-        const markerObj = {
-            _id: marker._id,
-            latitude: marker.latitude,
-            longitude: marker.longitude,
-            title: marker.title
-        };
-        if (this.state.isEdit) {
-            dispatch(updateMarker(markerObj))
+        if (validator.validateMarker(marker)) {
+            const markerObj = {
+                _id: marker._id,
+                latitude: marker.latitude,
+                longitude: marker.longitude,
+                title: marker.title
+            };
+            if (this.state.isEdit) {
+                dispatch(updateMarker(markerObj))
+            }
+            else {
+                dispatch(addMarker(markerObj));
+            }
+            this.hideDialog();
         }
         else {
-            dispatch(addMarker(markerObj));
+            this.setState({ isError: true });
         }
-        this.hideDialog();
     };
     deleteMarker(markerId) {
         const { dispatch } = this.props;
@@ -74,7 +81,7 @@ export class MapContainer extends Component {
     }
     hideDialog = () => {
         this.setState({
-            showDialog: false, isEdit: false, marker: {
+            showDialog: false, isEdit: false, isError: false, marker: {
                 latitude: null,
                 longitude: null,
                 title: '',
@@ -103,6 +110,7 @@ export class MapContainer extends Component {
                     marker={this.state.marker}
                     handleChange={(value, id) => this.handleChange(value, id)}
                     isEdit={this.state.isEdit}
+                    isError={this.state.isError}
                 >
                 </MarkerDialog>
                 <GridList container="pictures" size={6} component="section" >

@@ -1,14 +1,11 @@
 import React, { PureComponent } from 'react';
 import { Button, DialogContainer, TextField } from 'react-md';
+import validator from '../validator';
 import PropTypes from 'prop-types'
-import { continueStatement } from '@babel/types';
 
 export class MarkerDialog extends PureComponent {
-    constructor(props) {
-        super(props);
-    }
     render() {
-        const { visible, marker, isEdit } = this.props;
+        const { visible, marker, isEdit, isError } = this.props;
         const actions = [];
         const buttonText = isEdit ? "Save" : "Add";
         actions.push({ secondary: true, children: 'Cancel', onClick: this.props.hide });
@@ -49,7 +46,7 @@ export class MarkerDialog extends PureComponent {
                         required
                         type="number"
                     />
-
+                    {isError && <div className="validation-message">{validator.validationMessges.invalidInputs}</div>}
                 </DialogContainer>
             </div>
         );

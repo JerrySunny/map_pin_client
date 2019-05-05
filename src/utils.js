@@ -1,4 +1,4 @@
-async function _parseResponse(response) {
+const _parseResponse = async(response) => {
     const contentType = response.headers.get('content-type');
 
     if (contentType && contentType.indexOf('application/json') !== -1) {
@@ -13,7 +13,7 @@ async function _parseResponse(response) {
 }
 
 /* This function renders the status of response */
-export async function readResponse(response) {
+export const readResponse = async (response) => {
     let data = await _parseResponse(response);
     if (response && response.ok) {
         return data;
@@ -24,3 +24,4 @@ export async function readResponse(response) {
         throw error;
     }
 }
+

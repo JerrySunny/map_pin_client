@@ -12,6 +12,10 @@ export function createSuccessMessage(text) {
   const message = { text, messageType: 'success' };
   return { type: FLASH_MESSAGE__CREATE, message };
 }
+export function createWarningMessage(text) {
+  const message = { text, messageType: 'warning' };
+  return { type: FLASH_MESSAGE__CREATE, message };
+}
 
 export function deleteMessage() {
   return { type: FLASH_MESSAGE__DELETE };
