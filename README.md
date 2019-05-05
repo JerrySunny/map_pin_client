@@ -14,6 +14,8 @@ create .env file and set this variables
 
 In the project directory, you can run:
 ### `npm install`
+which installs all the node packages for app
+
 ### `npm start`
 
 Runs the app in the development mode.<br>
