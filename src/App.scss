@@ -1,5 +1,5 @@
 @import 'globals';
-
+@import 'colors.scss';
 .App {
   text-align: center;
 }
@@ -23,7 +23,42 @@
   font-size: large;
 }
 
+.flash-messages {
+  animation: slide-down 0.5s ease;
+  position: fixed;
+  top: 50px;
+  transition: top 500ms ease;
+  width: 100%;
+  z-index: 1;
+
+  &.error {
+    background-color: lighten($pink, 10%);
+  }
+
+  &.success {
+    background-color: lighten($green, 10%);
+  }
+
+  &.remove {
+    animation: slide-up 0.5s ease;
+    top: 0;
+  }
+}
+.flash-messages-text {
+  color: $white;
+  font-weight: bold;
+  line-height: 24px;
+  padding: 5px 0;
+  text-align: center;
+}
+
+
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }

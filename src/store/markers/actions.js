@@ -1,4 +1,5 @@
 import markerService from '../../services/markers';
+import { createErrorMessage, createSuccessMessage } from '../flashMessage/actions';
 export const GET_MARKERS = 'GET_MARKERS';
 export const GET_MARKERS_REQUEST = 'GET_MARKERS_REQUEST';
 export const GET_MARKERS_FAILURE = 'GET_MARKERS_FAILURE';
@@ -22,7 +23,8 @@ export const getMarkers = () => {
                 dispatch(getMarkersSuccess(markers));
         }
         catch (error) {
-            dispatch(getMarkersFailure);
+            dispatch(getMarkersFailure());
+            dispatch(createErrorMessage());
         }
     }
 }
@@ -34,9 +36,11 @@ export const addMarker = (marker) => {
             if (response) {
                 dispatch(addMarkerSuccess(response));
                 dispatch(getMarkers());
+                dispatch(createSuccessMessage("Marker added successfully."))
             }
         }
         catch (error) {
+            dispatch(getMarkersFailure());
             dispatch(addMarkerFailure(error));
         }
     }
@@ -50,9 +54,11 @@ export const updateMarker = (marker) => {
             if (response) {
                 dispatch(updateMarkerSuccess(response));
                 dispatch(getMarkers());
+                dispatch(createSuccessMessage("Marker saved successfully."))
             }
         }
         catch (error) {
+            dispatch(getMarkersFailure());
             dispatch(updateMarkerFailure(error));
         }
     }
@@ -65,9 +71,11 @@ export const deleteMarker = (markerId) => {
             if (response) {
                 dispatch(deleteMarkerSuccess());
                 dispatch(getMarkers());
+                dispatch(createSuccessMessage("Marker deleted successfully."))
             }
         }
         catch (error) {
+            dispatch(getMarkersFailure());            
             dispatch(deleteMarkerFailure(error));
         }
     }
