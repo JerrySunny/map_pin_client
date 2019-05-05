@@ -35,6 +35,7 @@ export class MarkerDialog extends PureComponent {
                         value={marker.latitude}
                         onChange={(value) => this.props.handleChange(value, 'latitude')}
                         required
+                        type="number"
                     />
                     <TextField
                         id="marker-long"
@@ -43,6 +44,7 @@ export class MarkerDialog extends PureComponent {
                         value={marker.longitude}
                         onChange={(value) => this.props.handleChange(value, 'longitude')}
                         required
+                        type="number"
                     />
                     {isError && <div className="validation-message">{validator.validationMessges.invalidInputs}</div>}
 
