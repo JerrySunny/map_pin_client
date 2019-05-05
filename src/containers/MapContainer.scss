@@ -1,0 +1,18 @@
+.Map-Container {
+  width: 50% !important;
+  height: 80% !important;
+}
+
+.Pin-Container {
+  padding: 2%;
+  margin-left: 50%;
+}
+
+.Pin-Container--divider {
+  margin-top: 1%
+}
+.Pin-Container--grid
+{
+  overflow: auto;
+  height: 500px;
+}
