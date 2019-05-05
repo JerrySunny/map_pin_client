@@ -1,7 +1,8 @@
 
 import {
     GET_MARKERS, GET_MARKERS_REQUEST, GET_MARKERS_FAILURE,
-    ADD_MARKER_SUCCESS, ADD_MARKER_FAILURE, ADD_MARKER_REQUEST
+    ADD_MARKER_SUCCESS, ADD_MARKER_FAILURE, ADD_MARKER_REQUEST,
+    UPDATE_MARKER_SUCCESS, UPDATE_MARKER_FAILURE, UPDATE_MARKER_REQUEST
 } from './actions'
 
 const initialState = {
@@ -10,6 +11,8 @@ const initialState = {
     error: {},
     getMarkersRequest: false,
     addMarkerRequest: false,
+    updateMarkerRequest: false,
+
 }
 const markers = (state = initialState, action) => {
     switch (action.type) {
@@ -39,7 +42,21 @@ const markers = (state = initialState, action) => {
         case ADD_MARKER_FAILURE:
             return Object.assign({}, state, {
                 error: action.error,
-                createTagsRequest: false,
+                addMarkerRequest: false,
+            });
+        case UPDATE_MARKER_REQUEST:
+            return Object.assign({}, state, {
+                updateMarkerRequest: true,
+            });
+        case UPDATE_MARKER_SUCCESS:
+            return Object.assign({}, state, {
+                marker: action.marker,
+                updateMarkerRequest: false,
+            });
+        case UPDATE_MARKER_FAILURE:
+            return Object.assign({}, state, {
+                error: action.error,
+                updateMarkerRequest: false,
             });
         default:
             return state

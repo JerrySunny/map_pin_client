@@ -28,7 +28,25 @@ const createMarker = async (marker) => {
     });
     return await readResponse(response);
 }
+
+const updateMarker = async (marker) => {
+    let response;
+    const url = `${api_url}/markers/${marker._id}`;
+    response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            title: marker.title,
+            latitude: marker.latitude,
+            longitude: marker.longitude
+        }),
+    });
+    return await readResponse(response);
+}
 export default {
     getMarkersList,
-    createMarker
+    createMarker,
+    updateMarker
 }

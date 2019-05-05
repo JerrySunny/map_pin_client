@@ -5,7 +5,7 @@ import { api_key } from '../config';
 import './MapContainer.css';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { getMarkers, addMarker } from '../store/markers/actions';
+import { getMarkers, addMarker, updateMarker } from '../store/markers/actions';
 import MarkerDialog from '../components/MarkerDialog';
 import MarkerList from '../components/MarkerList'
 export class MapContainer extends Component {
@@ -46,7 +46,12 @@ export class MapContainer extends Component {
             longitude: marker.longitude,
             title: marker.title
         };
-        dispatch(addMarker(markerObj));
+        if (this.state.isEdit) {
+            dispatch(updateMarker(markerObj))
+        }
+        else {
+            dispatch(addMarker(markerObj));
+        }
         this.hideDialog();
     };
     handleChange(value, id) {
@@ -93,6 +98,7 @@ export class MapContainer extends Component {
                     addMarker={() => this.addMarker()}
                     marker={this.state.marker}
                     handleChange={(value, id) => this.handleChange(value, id)}
+                    isEdit={this.state.isEdit}
                 >
                 </MarkerDialog>
                 <GridList container="pictures" size={6} component="section" >

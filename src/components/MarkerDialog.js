@@ -8,10 +8,11 @@ export class MarkerDialog extends PureComponent {
         super(props);
     }
     render() {
-        const { visible, marker } = this.props;
+        const { visible, marker, isEdit } = this.props;
         const actions = [];
+        const buttonText = isEdit ? "Save" : "Add";
         actions.push({ secondary: true, children: 'Cancel', onClick: this.props.hide });
-        actions.push(<Button flat primary onClick={() => this.props.addMarker()}>Add</Button>);
+        actions.push(<Button flat primary onClick={() => this.props.addMarker()}>{buttonText}</Button>);
 
         return (
             <div>
