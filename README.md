@@ -12,7 +12,8 @@ create .env file and set this variables
 ##### `REACT_APP_DEFAULT_COUNTRY`='Germany'
 
 ### `backend`
-backend has done in nodeJS , just up api end point
+backend has done in nodeJS 
+(https://github.com/JerrySunny/map_pin_server), just configure and up the api end point
 http://localhost:5001/api and run this app
 
 In the project directory, you can run:
