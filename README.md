@@ -17,12 +17,16 @@ In the project directory, you can run:
 which installs all the node packages for app
 
 ### `npm start`
-
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
+
+### `backend`
+backend has done node , just up api end point
+http://localhost:5001/api and run this app
+
 
 ### `npm test`
 
