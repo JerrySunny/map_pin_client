@@ -11,6 +11,9 @@ create .env file and set this variables
 ##### `REACT_APP_GOOGLE_API_URL`='https://maps.googleapis.com/maps/api/geocode/json?'
 ##### `REACT_APP_DEFAULT_COUNTRY`='Germany'
 
+### `backend`
+backend has done in nodeJS , just up api end point
+http://localhost:5001/api and run this app
 
 In the project directory, you can run:
 ### `npm install`
@@ -22,11 +25,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
-
-### `backend`
-backend has done node , just up api end point
-http://localhost:5001/api and run this app
-
 
 ### `npm test`
 
