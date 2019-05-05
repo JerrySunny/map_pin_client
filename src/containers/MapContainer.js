@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, GridList, Divider } from 'react-md';
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from 'google-maps-react';
-import { api_key } from '../config';
+import { maps_api_key, default_latitude, default_longitude } from '../config';
 import './MapContainer.css';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -114,7 +114,11 @@ export class MapContainer extends Component {
                 >
                 </MarkerDialog>
                 <GridList container="pictures" size={6} component="section" >
-                    <Map google={this.props.google} zoom={14} className="Map-Container">
+                    <Map google={this.props.google} zoom={14} className="Map-Container"
+                        initialCenter={{
+                            lat: default_latitude,
+                            lng: default_longitude
+                        }}>
                         {markers.map(marker => (
                             <Marker
                                 key={marker._id}
@@ -155,5 +159,5 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps
 )(GoogleApiWrapper({
-    apiKey: (api_key)
+    apiKey: (maps_api_key)
 })(MapContainer))

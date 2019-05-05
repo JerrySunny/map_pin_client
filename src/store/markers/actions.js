@@ -1,4 +1,6 @@
 import markerService from '../../services/markers';
+import maps from '../../services/maps';
+import validator from '../../validator';
 import { createErrorMessage, createSuccessMessage } from '../flashMessage/actions';
 export const GET_MARKERS = 'GET_MARKERS';
 export const GET_MARKERS_REQUEST = 'GET_MARKERS_REQUEST';
@@ -32,11 +34,22 @@ export const addMarker = (marker) => {
     return async dispatch => {
         dispatch(addMarkerRequest());
         try {
-            const response = await markerService.createMarker(marker);
-            if (response) {
-                dispatch(addMarkerSuccess(response));
-                dispatch(getMarkers());
-                dispatch(createSuccessMessage("Marker added successfully."))
+            const googleResponse = await maps.getAddress(marker.latitude, marker.longitude);
+            if (googleResponse.status === 'OK') {
+                if (validator.validateAddress(googleResponse)) {
+                    const response = await markerService.createMarker(marker);
+                    if (response) {
+                        dispatch(addMarkerSuccess(response));
+                        dispatch(getMarkers());
+                        dispatch(createSuccessMessage("Marker added successfully."))
+                    }
+                }
+                else {
+                    dispatch(createErrorMessage(validator.validationMessges.invalidAddress));
+                }
+            }
+            else {
+                dispatch(createErrorMessage(validator.validationMessges.invalidGoogleResponse));
             }
         }
         catch (error) {
@@ -50,12 +63,24 @@ export const updateMarker = (marker) => {
     return async dispatch => {
         dispatch(updateMarkerRequest());
         try {
-            const response = await markerService.updateMarker(marker);
-            if (response) {
-                dispatch(updateMarkerSuccess(response));
-                dispatch(getMarkers());
-                dispatch(createSuccessMessage("Marker saved successfully."))
+            const googleResponse = await maps.getAddress(marker.latitude, marker.longitude);
+            if (googleResponse.status === 'OK') {
+                if (validator.validateAddress(googleResponse)) {
+                    const response = await markerService.updateMarker(marker);
+                    if (response) {
+                        dispatch(updateMarkerSuccess(response));
+                        dispatch(getMarkers());
+                        dispatch(createSuccessMessage("Marker saved successfully."))
+                    }
+                }
+                else {
+                    dispatch(createErrorMessage(validator.validationMessges.invalidAddress));
+                }
             }
+            else {
+                dispatch(createErrorMessage(validator.validationMessges.invalidGoogleResponse));
+            }
+
         }
         catch (error) {
             dispatch(getMarkersFailure());
@@ -75,7 +100,7 @@ export const deleteMarker = (markerId) => {
             }
         }
         catch (error) {
-            dispatch(getMarkersFailure());            
+            dispatch(getMarkersFailure());
             dispatch(deleteMarkerFailure(error));
         }
     }
@@ -119,3 +144,4 @@ export function deleteMarkerRequest() {
 export const deleteMarkerFailure = (error) => {
     return { type: DELETE_MARKER_FAILURE, error };
 }
+
