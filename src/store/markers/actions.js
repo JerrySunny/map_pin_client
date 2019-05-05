@@ -8,6 +8,9 @@ export const ADD_MARKER_FAILURE = 'ADD_MARKER_FAILURE';
 export const UPDATE_MARKER_SUCCESS = 'UPDATE_MARKER_SUCCESS';
 export const UPDATE_MARKER_REQUEST = 'UPDATE_MARKER_REQUEST';
 export const UPDATE_MARKER_FAILURE = 'UPDATE_MARKER_FAILURE';
+export const DELETE_MARKER_SUCCESS = 'DELETE_MARKER_SUCCESS';
+export const DELETE_MARKER_REQUEST = 'DELETE_MARKER_REQUEST';
+export const DELETE_MARKER_FAILURE = 'DELETE_MARKER_FAILURE';
 
 
 export const getMarkers = () => {
@@ -28,9 +31,10 @@ export const addMarker = (marker) => {
         dispatch(addMarkerRequest());
         try {
             const response = await markerService.createMarker(marker);
-            if (response)
+            if (response) {
                 dispatch(addMarkerSuccess(response));
-            dispatch(getMarkers());
+                dispatch(getMarkers());
+            }
         }
         catch (error) {
             dispatch(addMarkerFailure(error));
@@ -43,15 +47,32 @@ export const updateMarker = (marker) => {
         dispatch(updateMarkerRequest());
         try {
             const response = await markerService.updateMarker(marker);
-            if (response)
+            if (response) {
                 dispatch(updateMarkerSuccess(response));
-            dispatch(getMarkers());
+                dispatch(getMarkers());
+            }
         }
         catch (error) {
             dispatch(updateMarkerFailure(error));
         }
     }
 }
+export const deleteMarker = (markerId) => {
+    return async dispatch => {
+        dispatch(deleteMarkerRequest());
+        try {
+            const response = await markerService.deleteMarker(markerId);
+            if (response) {
+                dispatch(deleteMarkerSuccess());
+                dispatch(getMarkers());
+            }
+        }
+        catch (error) {
+            dispatch(deleteMarkerFailure(error));
+        }
+    }
+}
+
 export const getMarkersSuccess = (markers) => {
     return { type: GET_MARKERS, markers };
 }
@@ -79,4 +100,14 @@ export function updateMarkerRequest() {
 }
 export const updateMarkerFailure = (error) => {
     return { type: UPDATE_MARKER_FAILURE, error };
+}
+
+export const deleteMarkerSuccess = () => {
+    return { type: DELETE_MARKER_SUCCESS };
+}
+export function deleteMarkerRequest() {
+    return { type: DELETE_MARKER_REQUEST };
+}
+export const deleteMarkerFailure = (error) => {
+    return { type: DELETE_MARKER_FAILURE, error };
 }

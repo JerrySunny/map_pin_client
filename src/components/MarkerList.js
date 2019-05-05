@@ -25,7 +25,7 @@ export class MarkerList extends PureComponent {
                             </p>
                             <CardActions className="md-divider-border md-divider-border--top" centered   >
                                 <Button flat primary onClick={()=>this.props.editMarker(marker)}>Edit</Button>
-                                <Button flat primary>Delete</Button>
+                                <Button flat primary onClick={()=>this.props.deleteMarker(marker._id)}>Delete</Button>
                             </CardActions>
                         </Card>
                     ))}

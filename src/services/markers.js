@@ -45,8 +45,20 @@ const updateMarker = async (marker) => {
     });
     return await readResponse(response);
 }
+const deleteMarker = async (markerId) => {
+    let response;
+    const url = `${api_url}/markers/${markerId}`;
+    response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return await readResponse(response);
+}
 export default {
     getMarkersList,
     createMarker,
-    updateMarker
+    updateMarker,
+    deleteMarker
 }

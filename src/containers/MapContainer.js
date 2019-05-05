@@ -5,7 +5,7 @@ import { api_key } from '../config';
 import './MapContainer.css';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { getMarkers, addMarker, updateMarker } from '../store/markers/actions';
+import { getMarkers, addMarker, updateMarker, deleteMarker } from '../store/markers/actions';
 import MarkerDialog from '../components/MarkerDialog';
 import MarkerList from '../components/MarkerList'
 export class MapContainer extends Component {
@@ -38,8 +38,8 @@ export class MapContainer extends Component {
         this.setState({ showDialog: true, marker, isEdit: true });
     }
     addMarker = () => {
-        const marker = { ...this.state.marker }
         const { dispatch } = this.props;
+        const marker = { ...this.state.marker }
         const markerObj = {
             _id: marker._id,
             latitude: marker.latitude,
@@ -54,6 +54,10 @@ export class MapContainer extends Component {
         }
         this.hideDialog();
     };
+    deleteMarker(markerId) {
+        const { dispatch } = this.props;
+        dispatch(deleteMarker(markerId))
+    }
     handleChange(value, id) {
         const marker = { ...this.state.marker }
         if (id === 'title') {
@@ -122,7 +126,10 @@ export class MapContainer extends Component {
                             <Button flat primary swapTheming onClick={() => this.openDialog()} className="addBtn">Add Marker</Button>
                         </div>
                         <Divider className="Pin-Container--divider" />
-                        <MarkerList markers={markers} editMarker={(marker) => this.editMarker(marker)} />
+                        <MarkerList markers={markers}
+                            editMarker={(marker) => this.editMarker(marker)}
+                            deleteMarker={(markerId) => this.deleteMarker(markerId)}
+                        />
                     </div>
                 </GridList>
 
